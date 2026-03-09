@@ -4,7 +4,7 @@ node_modules
 # output
 out
 *.tgz
-# Note: dist is NOT ignored - it's needed for GitHub Pages
+# Note: docs is NOT ignored - it's needed for GitHub Pages
 
 # code coverage
 coverage

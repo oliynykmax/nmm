@@ -2,7 +2,7 @@
 
 A clean, well-designed mirror of LUT University's Numerical Methods course page (BM20A1502).
 
-**Live site:** https://kort.github.io/numerical-methods-mirror
+**Live site:** https://oliynykmax.github.io/numerical-methods-mirror
 
 ## Features
 
@@ -27,16 +27,16 @@ Then open http://localhost:3000
 ## Build & Deploy
 
 ```bash
-# Build for production (outputs to /dist)
+# Build for production (outputs to /docs)
 bun run build
 ```
 
-The `dist/` folder is served by GitHub Pages. To update:
+The `docs/` folder is served by GitHub Pages. To update:
 
 1. Make changes
 2. Run `bun run build`
 3. Commit and push to `main`
-4. GitHub Pages will automatically serve from `/dist`
+4. GitHub Pages will automatically serve from `/docs`
 
 ## Tech Stack
 
