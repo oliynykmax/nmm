@@ -254,7 +254,7 @@ function RefreshButton({
         <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
         <path d="M16 21h5v-5" />
       </svg>
-      {loading ? "Refreshing..." : "Refresh"}
+      <span className="refresh-text">{loading ? "Refreshing..." : "Refresh"}</span>
     </button>
   );
 }
@@ -461,16 +461,14 @@ function App() {
     <div className="app">
       <header className="header">
         <div className="header-top">
-          <LanguageToggle language={language} onToggle={toggleLanguage} />
+          <h1 className="header-title">{l.title}</h1>
           <div className="header-controls">
+            <LanguageToggle language={language} onToggle={toggleLanguage} />
             <ThemeToggle theme={theme} onToggle={toggleTheme} />
             <RefreshButton onRefresh={handleRefresh} loading={refreshing} />
           </div>
         </div>
-        <div className="header-content">
-          <h1>{l.title}</h1>
-          <p className="subtitle">{l.subtitle}</p>
-        </div>
+        <p className="subtitle">{l.subtitle}</p>
       </header>
       
       <main className="main">

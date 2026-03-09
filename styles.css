@@ -193,22 +193,19 @@ body {
   align-items: center;
 }
 
-.header-content {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  text-align: center;
-}
-
-.header h1 {
+.header-title {
   font-family: var(--font-heading);
   font-size: 2rem;
   font-weight: 700;
   color: var(--color-text);
   letter-spacing: -0.02em;
-  margin-bottom: var(--space-xs);
+  margin: 0;
 }
 
 .subtitle {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  text-align: center;
   font-size: 0.9375rem;
   color: var(--color-text-secondary);
   letter-spacing: 0.05em;
@@ -536,32 +533,30 @@ body {
    ============================================================================ */
 
 @media (max-width: 480px) {
-  /* Compact header */
+  /* Compact header - single row */
   .header {
-    padding: var(--space-md) var(--space-md);
+    padding: var(--space-sm) var(--space-md);
   }
   
   .header-top {
-    flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: var(--space-md);
-  }
-  
-  .header-content {
-    text-align: left;
-  }
-  
-  .header h1 {
-    font-size: 1.25rem;
     margin-bottom: 0;
   }
   
-  .subtitle {
-    font-size: 0.6875rem;
-    letter-spacing: 0.03em;
+  .header-title {
+    font-size: 1rem;
   }
   
-  /* Smaller control buttons */
+  .subtitle {
+    display: none;
+  }
+  
+  /* All controls together */
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+  
   .language-toggle {
     padding: var(--space-xs) var(--space-sm);
     font-size: 0.75rem;
@@ -578,13 +573,19 @@ body {
   }
   
   .refresh-button {
-    padding: var(--space-xs) var(--space-sm);
-    font-size: 0.75rem;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    justify-content: center;
   }
   
   .refresh-button svg {
     width: 14px;
     height: 14px;
+  }
+  
+  .refresh-text {
+    display: none;
   }
   
   /* Compact main content */
