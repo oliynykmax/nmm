@@ -1,0 +1,536 @@
+/* ============================================================================
+   Numerical Methods Mirror - Minimalist Academic Design
+   ============================================================================ */
+
+/* CSS Variables */
+:root {
+  /* Colors - refined, academic palette */
+  --color-bg: #FAFBFC;
+  --color-surface: #FFFFFF;
+  --color-text: #111827;
+  --color-text-secondary: #6B7280;
+  --color-text-muted: #9CA3AF;
+  --color-accent: #1E40AF;
+  --color-accent-hover: #1E3A8A;
+  --color-border: #E5E7EB;
+  --color-border-subtle: #F3F4F6;
+  
+  /* Typography */
+  --font-heading: 'Libre Baskerville', Georgia, 'Times New Roman', serif;
+  --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  
+  /* Layout */
+  --max-width: 720px;
+  --border-radius: 4px;
+  
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+}
+
+/* Reset & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  min-height: 100vh;
+}
+
+/* ============================================================================
+   Loading State
+   ============================================================================ */
+
+.loading-shell,
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: var(--space-lg);
+  color: var(--color-text-secondary);
+}
+
+.loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================================
+   Error State
+   ============================================================================ */
+
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  text-align: center;
+}
+
+.error-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FEF2F2;
+  color: #DC2626;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.error-state h2 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.error-state p {
+  color: var(--color-text-secondary);
+  max-width: 400px;
+}
+
+.retry-button {
+  margin-top: var(--space-md);
+  padding: var(--space-sm) var(--space-lg);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: white;
+  background: var(--color-accent);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.retry-button:hover {
+  background: var(--color-accent-hover);
+}
+
+/* ============================================================================
+   App Layout
+   ============================================================================ */
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================================
+   Header
+   ============================================================================ */
+
+.header {
+  padding: var(--space-xl) var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.header-top {
+  max-width: var(--max-width);
+  margin: 0 auto var(--space-xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.header h1 {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-xs);
+}
+
+.subtitle {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Language Toggle */
+.language-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.language-toggle:hover {
+  border-color: var(--color-text-secondary);
+}
+
+.language-toggle .active {
+  color: var(--color-accent);
+}
+
+.language-toggle .separator {
+  color: var(--color-border);
+}
+
+/* Refresh Button */
+.refresh-button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.refresh-button:hover:not(:disabled) {
+  border-color: var(--color-text-secondary);
+  color: var(--color-text);
+}
+
+.refresh-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.refresh-button svg {
+  flex-shrink: 0;
+}
+
+.refresh-button svg.spinning {
+  animation: spin 1s linear infinite;
+}
+
+/* ============================================================================
+   Main Content
+   ============================================================================ */
+
+.main {
+  flex: 1;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-2xl) var(--space-lg);
+  width: 100%;
+}
+
+.section {
+  margin-bottom: var(--space-3xl);
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.section h2 {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* ============================================================================
+   Resource Cards (Lecture Notes, Moodle)
+   ============================================================================ */
+
+.resource-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-lg);
+}
+
+@media (max-width: 540px) {
+  .resource-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.resource-card {
+  padding: var(--space-xl);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  text-align: center;
+  transition: border-color var(--transition-fast);
+}
+
+.resource-card:hover {
+  border-color: var(--color-text-secondary);
+}
+
+.resource-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--space-md);
+  color: var(--color-accent);
+  background: #EFF6FF;
+  border-radius: 50%;
+}
+
+.resource-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--space-md);
+}
+
+/* ============================================================================
+   Link Buttons
+   ============================================================================ */
+
+.link-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: var(--border-radius);
+  transition: all var(--transition-fast);
+}
+
+.link-button.primary {
+  color: white;
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+}
+
+.link-button.primary:hover {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+.link-button.secondary {
+  color: var(--color-accent);
+  background: transparent;
+  border: 1px solid var(--color-accent);
+}
+
+.link-button.secondary:hover {
+  background: #EFF6FF;
+}
+
+.link-button svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+/* Unavailable Links */
+.link-button.unavailable {
+  color: var(--color-text-muted);
+  background: var(--color-border-subtle);
+  border: 1px dashed var(--color-border);
+  cursor: default;
+  position: relative;
+}
+
+.link-button.unavailable:hover {
+  background: var(--color-border-subtle);
+}
+
+.link-button.unavailable .coming-soon {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  opacity: 0.7;
+}
+
+/* ============================================================================
+   Exercise Cards
+   ============================================================================ */
+
+.exercises-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.exercise-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  transition: border-color var(--transition-fast);
+}
+
+.exercise-card:hover {
+  border-color: var(--color-text-secondary);
+}
+
+.exercise-card.empty {
+  opacity: 0.7;
+}
+
+.exercise-card.empty:hover {
+  border-color: var(--color-border);
+}
+
+.exercise-number {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  background: #EFF6FF;
+  border-radius: 50%;
+}
+
+.exercise-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.exercise-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* ============================================================================
+   Footer
+   ============================================================================ */
+
+.footer {
+  padding: var(--space-xl) var(--space-lg);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.footer-content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
+.source-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.source-link:hover {
+  color: var(--color-accent);
+}
+
+/* ============================================================================
+   Responsive Adjustments
+   ============================================================================ */
+
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .subtitle {
+    font-size: 0.8125rem;
+  }
+  
+  .header-top {
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+  
+  .exercise-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+  }
+  
+  .exercise-number {
+    width: 32px;
+    height: 32px;
+    font-size: 0.875rem;
+  }
+  
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
