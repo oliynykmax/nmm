@@ -556,17 +556,107 @@ body {
    ============================================================================ */
 
 @media (max-width: 480px) {
-  .header h1 {
-    font-size: 1.5rem;
-  }
-  
-  .subtitle {
-    font-size: 0.8125rem;
+  /* Compact header */
+  .header {
+    padding: var(--space-md) var(--space-md);
   }
   
   .header-top {
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: var(--space-md);
+  }
+  
+  .header-content {
+    text-align: left;
+  }
+  
+  .header h1 {
+    font-size: 1.25rem;
+    margin-bottom: 0;
+  }
+  
+  .subtitle {
+    font-size: 0.6875rem;
+    letter-spacing: 0.03em;
+  }
+  
+  /* Smaller control buttons */
+  .language-toggle {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.75rem;
+  }
+  
+  .theme-toggle {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .theme-toggle svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .refresh-button {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.75rem;
+  }
+  
+  .refresh-button svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  /* Compact main content */
+  .main {
+    padding: var(--space-lg) var(--space-md);
+  }
+  
+  .section {
+    margin-bottom: var(--space-xl);
+  }
+  
+  .section h2 {
+    font-size: 1rem;
+    margin-bottom: var(--space-md);
+  }
+  
+  /* Compact resource cards - inline style */
+  .resource-cards {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+  
+  .resource-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     gap: var(--space-md);
+    padding: var(--space-md);
+    text-align: left;
+  }
+  
+  .resource-icon {
+    width: 36px;
+    height: 36px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+  
+  .resource-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .resource-card h3 {
+    flex: 1;
+    margin-bottom: 0;
+    font-size: 0.875rem;
+  }
+  
+  /* Exercise cards */
+  .exercises-grid {
+    gap: var(--space-sm);
   }
   
   .exercise-card {
@@ -575,9 +665,9 @@ body {
   }
   
   .exercise-number {
-    width: 32px;
-    height: 32px;
-    font-size: 0.875rem;
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
   }
   
   .exercise-links {
@@ -598,8 +688,15 @@ body {
     font-size: 0.5625rem;
   }
   
+  /* Compact footer */
+  .footer {
+    padding: var(--space-md);
+  }
+  
   .footer-content {
     flex-direction: column;
     text-align: center;
+    gap: var(--space-sm);
+    font-size: 0.75rem;
   }
 }
