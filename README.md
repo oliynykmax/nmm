@@ -2,13 +2,14 @@
 
 A clean, well-designed mirror of LUT University's Numerical Methods course page (BM20A1502).
 
-**Live site:** https://oliynykmax.github.io/numerical-methods-mirror
+**Live site:** https://oliynykmax.github.io/nmm
 
 ## Features
 
 - Fetches content live from the original course page on every visit
 - Filters out rickroll links and shows them as "Coming soon"
 - Bilingual support (Finnish / English toggle)
+- Dark mode with system preference detection
 - Manual refresh button to re-fetch latest content
 - Clean, minimalist academic design
 

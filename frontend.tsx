@@ -7,6 +7,7 @@ import "./styles.css";
 // ============================================================================
 
 type Language = "fi" | "en";
+type Theme = "light" | "dark";
 
 interface Link {
   href: string;
@@ -193,6 +194,36 @@ function LanguageToggle({
   );
 }
 
+function ThemeToggle({
+  theme,
+  onToggle,
+}: {
+  theme: Theme;
+  onToggle: () => void;
+}) {
+  return (
+    <button className="theme-toggle" onClick={onToggle} aria-label="Toggle theme">
+      {theme === "light" ? (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="5" />
+          <line x1="12" y1="1" x2="12" y2="3" />
+          <line x1="12" y1="21" x2="12" y2="23" />
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+          <line x1="1" y1="12" x2="3" y2="12" />
+          <line x1="21" y1="12" x2="23" y2="12" />
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+        </svg>
+      )}
+    </button>
+  );
+}
+
 function RefreshButton({ 
   onRefresh, 
   loading 
@@ -332,10 +363,27 @@ function ErrorState({
 
 function App() {
   const [language, setLanguage] = useState<Language>("en");
+  const [theme, setTheme] = useState<Theme>(() => {
+    // Check localStorage first, then system preference
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("theme") as Theme | null;
+      if (saved) return saved;
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        return "dark";
+      }
+    }
+    return "light";
+  });
   const [data, setData] = useState<CourseData | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // Apply theme to document
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
   
   const fetchData = useCallback(async (isRefresh = false) => {
     if (isRefresh) {
@@ -362,6 +410,10 @@ function App() {
   
   const toggleLanguage = () => {
     setLanguage((prev) => (prev === "en" ? "fi" : "en"));
+  };
+  
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
   
   const handleRefresh = () => {
@@ -406,7 +458,10 @@ function App() {
       <header className="header">
         <div className="header-top">
           <LanguageToggle language={language} onToggle={toggleLanguage} />
-          <RefreshButton onRefresh={handleRefresh} loading={refreshing} />
+          <div className="header-controls">
+            <ThemeToggle theme={theme} onToggle={toggleTheme} />
+            <RefreshButton onRefresh={handleRefresh} loading={refreshing} />
+          </div>
         </div>
         <div className="header-content">
           <h1>{l.title}</h1>
