@@ -312,19 +312,17 @@ function ExerciseCard({
   
   return (
     <div className={`exercise-card ${!hasAnyContent ? "empty" : ""}`}>
-      <div className="exercise-number">
-        <span>{exercise.number}</span>
-      </div>
-      <div className="exercise-content">
-        <div className="exercise-links">
-          <LinkButton link={ex} variant="primary">
-            {labels[language].exercises}
-          </LinkButton>
-          <LinkButton link={sol} variant="secondary">
-            {labels[language].solutions}
-          </LinkButton>
+      <div className="exercise-primary">
+        <div className="exercise-number">
+          <span>{exercise.number}</span>
         </div>
+        <LinkButton link={ex} variant="primary">
+          {labels[language].exercises}
+        </LinkButton>
       </div>
+      <LinkButton link={sol} variant="secondary">
+        {labels[language].solutions}
+      </LinkButton>
     </div>
   );
 }

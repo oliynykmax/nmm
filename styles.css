@@ -25,14 +25,14 @@
   /* Spacing */
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
-  --space-md: 1rem;
-  --space-lg: 1.5rem;
-  --space-xl: 2rem;
-  --space-2xl: 3rem;
-  --space-3xl: 4rem;
+  --space-md: 0.875rem;
+  --space-lg: 1.25rem;
+  --space-xl: 1.5rem;
+  --space-2xl: 2rem;
+  --space-3xl: 2.5rem;
   
   /* Layout */
-  --max-width: 720px;
+  --max-width: 800px;
   --border-radius: 4px;
   
   /* Transitions */
@@ -180,14 +180,14 @@ body {
    ============================================================================ */
 
 .header {
-  padding: var(--space-xl) var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
   border-bottom: 1px solid var(--color-border);
   background: var(--color-surface);
 }
 
 .header-top {
   max-width: var(--max-width);
-  margin: 0 auto var(--space-xl);
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -195,7 +195,7 @@ body {
 
 .header-title {
   font-family: var(--font-heading);
-  font-size: 2rem;
+  font-size: 1.375rem;
   font-weight: 700;
   color: var(--color-text);
   letter-spacing: -0.02em;
@@ -203,14 +203,7 @@ body {
 }
 
 .subtitle {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  text-align: center;
-  font-size: 0.9375rem;
-  color: var(--color-text-secondary);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  font-weight: 500;
+  display: none;
 }
 
 /* Language Toggle */
@@ -319,12 +312,12 @@ body {
   flex: 1;
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: var(--space-2xl) var(--space-lg);
+  padding: var(--space-lg) var(--space-lg);
   width: 100%;
 }
 
 .section {
-  margin-bottom: var(--space-3xl);
+  margin-bottom: var(--space-xl);
 }
 
 .section:last-child {
@@ -333,11 +326,11 @@ body {
 
 .section h2 {
   font-family: var(--font-heading);
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--color-text);
-  margin-bottom: var(--space-lg);
-  padding-bottom: var(--space-sm);
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-xs);
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -347,14 +340,14 @@ body {
 
 .resource-cards {
   display: flex;
-  gap: var(--space-md);
+  gap: var(--space-sm);
 }
 
 .resource-cards .link-button {
   flex: 1;
   justify-content: center;
-  padding: var(--space-md) var(--space-lg);
-  font-size: 0.9375rem;
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.875rem;
 }
 
 .resource-icon-inline {
@@ -377,8 +370,8 @@ body {
 .link-button {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-sm) var(--space-md);
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-lg);
   font-family: var(--font-body);
   font-size: 0.8125rem;
   font-weight: 500;
@@ -441,14 +434,15 @@ body {
 .exercises-grid {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: var(--space-sm);
 }
 
 .exercise-card {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
   align-items: center;
-  gap: var(--space-lg);
-  padding: var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
@@ -467,30 +461,35 @@ body {
   border-color: var(--color-border);
 }
 
+.exercise-primary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.exercise-primary .link-button {
+  flex: 1;
+  justify-content: center;
+}
+
+.exercise-card > .link-button {
+  justify-content: center;
+}
+
 .exercise-number {
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   font-family: var(--font-heading);
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-weight: 700;
   color: var(--color-accent);
   background: var(--color-accent-subtle);
   border-radius: 50%;
-}
-
-.exercise-content {
-  flex: 1;
-  min-width: 0;
-}
-
-.exercise-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
+  margin-left: -0.5rem;
 }
 
 /* ============================================================================
@@ -498,7 +497,7 @@ body {
    ============================================================================ */
 
 .footer {
-  padding: var(--space-xl) var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
   border-top: 1px solid var(--color-border);
   background: var(--color-surface);
 }
@@ -510,8 +509,8 @@ body {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--space-md);
-  font-size: 0.8125rem;
+  gap: var(--space-sm);
+  font-size: 0.75rem;
   color: var(--color-text-muted);
 }
 
