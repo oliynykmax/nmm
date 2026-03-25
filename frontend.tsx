@@ -61,7 +61,7 @@ function resolveUrl(href: string | null, baseUrl: string): string {
 const SOURCE_URL = "https://tskarvone.github.io/courses/2026-numer";
 
 async function fetchAndParseCourseData(): Promise<CourseData> {
-  const response = await fetch(SOURCE_URL);
+  const response = await fetch(SOURCE_URL, { cache: "no-cache" });
   const html = await response.text();
   
   const parser = new DOMParser();
