@@ -46,12 +46,11 @@ function isRickroll(url: string): boolean {
 
 function resolveUrl(href: string | null, baseUrl: string): string {
   if (!href) return "";
-  if (href.startsWith("http://") || href.startsWith("https://")) {
-    return href;
+  try {
+    return new URL(href, baseUrl).href;
+  } catch {
+    return "";
   }
-  // Relative URL - resolve against base
-  const base = new URL(baseUrl);
-  return new URL(href, base).href;
 }
 
 // ============================================================================
@@ -71,7 +70,7 @@ async function fetchAndParseCourseData(): Promise<CourseData> {
   const allLinks = Array.from(doc.querySelectorAll("a")) as HTMLAnchorElement[];
   
   const findLink = (pattern: string): Link => {
-    const anchor = allLinks.find((a: HTMLAnchorElement) => a.getAttribute("href")?.includes(pattern));
+    const anchor = allLinks.find((a) => a.getAttribute("href")?.includes(pattern));
     const href = anchor?.getAttribute("href") || "";
     const resolved = resolveUrl(href, SOURCE_URL);
     return {
@@ -87,11 +86,11 @@ async function fetchAndParseCourseData(): Promise<CourseData> {
   };
   
   // Moodle links
-  const moodleFi = allLinks.find((a: HTMLAnchorElement) => 
+  const moodleFi = allLinks.find((a) => 
     a.textContent?.includes("Suomenkielinen Moodle") || 
     a.getAttribute("href")?.includes("25579")
   );
-  const moodleEn = allLinks.find((a: HTMLAnchorElement) => 
+  const moodleEn = allLinks.find((a) => 
     a.textContent?.includes("English Moodle") || 
     a.getAttribute("href")?.includes("25580")
   );
@@ -116,7 +115,7 @@ async function fetchAndParseCourseData(): Promise<CourseData> {
     
     const getExerciseLink = (lang: "fi" | "en"): Link => {
       const pattern = lang === "fi" ? `ex${index + 1}_fi.pdf` : `ex${index + 1}_en.pdf`;
-      const anchor = links.find((a: HTMLAnchorElement) => a.getAttribute("href")?.includes(pattern));
+      const anchor = links.find((a) => a.getAttribute("href")?.includes(pattern));
       const href = anchor?.getAttribute("href") || "";
       const resolved = resolveUrl(href, SOURCE_URL);
       return {
@@ -127,14 +126,14 @@ async function fetchAndParseCourseData(): Promise<CourseData> {
     
     const getSolutionLink = (lang: "fi" | "en"): Link => {
       const pattern = lang === "fi" ? `ex${index + 1}_fi_sol.pdf` : `ex${index + 1}_en_sol.pdf`;
-      const anchor = links.find((a: HTMLAnchorElement) => a.getAttribute("href")?.includes(pattern));
+      const anchor = links.find((a) => a.getAttribute("href")?.includes(pattern));
       const href = anchor?.getAttribute("href") || "";
       const resolved = resolveUrl(href, SOURCE_URL);
       
       // Check if this is a rickroll (solution links often are)
       if (!resolved || isRickroll(resolved)) {
         // Also check if there's any "sol" link that's a rickroll
-        const solAnchor = links.find((a: HTMLAnchorElement) => {
+        const solAnchor = links.find((a) => {
           const h = a.getAttribute("href") || "";
           const text = a.textContent?.toLowerCase() || "";
           return (text.includes("ratkaisu") || text.includes("solution")) && isRickroll(h);
@@ -186,7 +185,7 @@ function LanguageToggle({
   onToggle: () => void;
 }) {
   return (
-    <button className="language-toggle" onClick={onToggle} aria-label="Toggle language">
+    <button className="language-toggle" onClick={onToggle} aria-label={language === "fi" ? "Switch to English" : "Vaihda kieleksi suomi"}>
       <span className={language === "fi" ? "active" : ""}>FI</span>
       <span className="separator">/</span>
       <span className={language === "en" ? "active" : ""}>EN</span>
@@ -202,13 +201,13 @@ function ThemeToggle({
   onToggle: () => void;
 }) {
   return (
-    <button className="theme-toggle" onClick={onToggle} aria-label="Toggle theme">
+    <button className="theme-toggle" onClick={onToggle} aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}>
       {theme === "light" ? (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
         </svg>
       ) : (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="5" />
           <line x1="12" y1="1" x2="12" y2="3" />
           <line x1="12" y1="21" x2="12" y2="23" />
@@ -239,6 +238,7 @@ function RefreshButton({
       aria-label="Refresh content"
     >
       <svg 
+        aria-hidden="true"
         className={loading ? "spinning" : ""} 
         width="18" 
         height="18" 
@@ -270,10 +270,13 @@ function LinkButton({
 }) {
   if (!link.available) {
     return (
-      <span className={`link-button ${variant} unavailable`}>
+      <button
+        disabled
+        className={`link-button ${variant} unavailable`}
+      >
         {children}
         <span className="coming-soon">Coming soon</span>
-      </span>
+      </button>
     );
   }
   
@@ -285,7 +288,7 @@ function LinkButton({
       className={`link-button ${variant}`}
     >
       {children}
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
         <polyline points="15 3 21 3 21 9" />
         <line x1="10" y1="14" x2="21" y2="3" />
@@ -329,8 +332,8 @@ function ExerciseCard({
 
 function LoadingState() {
   return (
-    <div className="loading-state">
-      <div className="loading-spinner"></div>
+    <div className="loading-state" role="status" aria-live="polite">
+      <div aria-hidden="true" className="loading-spinner"></div>
       <p>Fetching course materials...</p>
     </div>
   );
@@ -338,15 +341,15 @@ function LoadingState() {
 
 function ErrorState({ 
   error, 
-  onRetry 
+  onRetry
 }: { 
   error: string; 
   onRetry: () => void;
 }) {
   return (
-    <div className="error-state">
-      <div className="error-icon">!</div>
-      <h2>Failed to load course materials</h2>
+    <div className="error-state" role="alert">
+      <div aria-hidden="true" className="error-icon">!</div>
+      <h1>Failed to load course materials</h1>
       <p>{error}</p>
       <button className="retry-button" onClick={onRetry}>
         Try Again
@@ -382,6 +385,23 @@ function App() {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
+  
+  // Sync lang attribute with selected language
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
+  
+  // Listen for OS color-scheme changes when no explicit preference stored
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = (e: MediaQueryListEvent) => {
+      if (!localStorage.getItem("theme")) {
+        setTheme(e.matches ? "dark" : "light");
+      }
+    };
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
   
   const fetchData = useCallback(async (isRefresh = false) => {
     if (isRefresh) {
@@ -457,6 +477,7 @@ function App() {
   
   return (
     <div className="app">
+      <a href="#main-content" className="skip-link">Skip to content</a>
       <header className="header">
         <div className="header-top">
           <h1 className="header-title">{l.title}</h1>
@@ -469,12 +490,12 @@ function App() {
         <p className="subtitle">{l.subtitle}</p>
       </header>
       
-      <main className="main">
+      <main id="main-content" className="main">
         {/* Primary Resources */}
         <section className="section resources">
           <div className="resource-cards">
             <LinkButton link={data.lectureNotes[language]} variant="primary">
-              <svg className="resource-icon-inline" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg aria-hidden="true" className="resource-icon-inline" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
                 <path d="M8 7h6" />
                 <path d="M8 11h8" />
@@ -484,7 +505,7 @@ function App() {
             </LinkButton>
             
             <LinkButton link={data.moodle[language]} variant="primary">
-              <svg className="resource-icon-inline" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg aria-hidden="true" className="resource-icon-inline" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
                 <path d="M6 12v5c3 3 9 3 12 0v-5" />
               </svg>
@@ -521,7 +542,7 @@ function App() {
             className="source-link"
           >
             {l.sourceLink}
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
               <polyline points="15 3 21 3 21 9" />
               <line x1="10" y1="14" x2="21" y2="3" />
@@ -540,5 +561,9 @@ function App() {
 const container = document.getElementById("root");
 if (container) {
   const root = createRoot(container);
-  root.render(<App />);
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
 }
